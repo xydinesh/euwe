@@ -9,7 +9,7 @@ from .models import (
     )
 
 
-@view_config(route_name='home', renderer='templates/mytemplate.mako')
+@view_config(route_name='home', renderer='templates/welcome.mako')
 def my_view(request):
     try:
         one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
