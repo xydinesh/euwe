@@ -1,3 +1,5 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 import transaction
 
@@ -60,4 +62,13 @@ class EuweFunctionalTests(unittest.TestCase):
     # he tries and solve the problem
     # then he gets the next problem
     # he use the hint button
-    # he still can not do this, decide to try later.
+    # he still can not do this, decide to try later
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)
+
+    def tearDown(self):
+        self.browser.quit()
+
+    def test_get_the_board_view(self):
+        self.browser.get('http://localhost:6543')
