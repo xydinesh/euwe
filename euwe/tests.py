@@ -70,5 +70,24 @@ class EuweFunctionalTests(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_get_the_board_view(self):
+    def test_browser_title(self):
         self.browser.get('http://localhost:6543')
+        self.assertIn('Euwe', self.browser.title)
+
+    def test_username_password(self):
+        self.browser.get('http://localhost:6543')
+        inputbox = self.browser.find_element_by_id('id_username')
+        self.assertEqual(inputbox.get_atrribute('placeholder'), 'username')
+
+        password = self.browser.find_element_by_id('id_password')
+        self.assertEqual(password.get_atrribute('placeholder'), '')
+
+        submit = self.browser.find_elmement_by_name('submit')
+
+        inputbox.send_keys('max')
+        inputbox.send_keys(Keys.ENTER)
+
+        password.send_keys('max123')
+        password.send_keys(Keys.ENTER)
+
+        submit.submit()
