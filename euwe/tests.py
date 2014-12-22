@@ -53,3 +53,11 @@ class TestMyViewFailureCondition(unittest.TestCase):
         request = testing.DummyRequest()
         info = my_view(request)
         self.assertEqual(info.status_int, 500)
+
+class EuweFunctionalTests(unittest.TestCase):
+    # user max logs in by putting his username and password
+    # when he logs in he gets tactics to work on
+    # he tries and solve the problem
+    # then he gets the next problem
+    # he use the hint button
+    # he still can not do this, decide to try later.
