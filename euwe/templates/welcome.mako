@@ -1,4 +1,8 @@
- <%inherit file="layout.mako" />
+<%inherit file="layout.mako" />
+
+<%def name="body_content()">
+<h1>Welcome to ${project}</h1>
+</%def>
 
 <%def name="javascript()">
 var init = function() {
