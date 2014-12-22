@@ -11,7 +11,10 @@
     <title>Euwe Chess Tactics Engine for Absolute Begineers.</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
     <!-- Custom styles for this scaffold -->
     <link href="${request.static_url('euwe:static/css/theme.css')}" rel="stylesheet">
@@ -25,17 +28,21 @@
   </head>
 
   <body>
+    <div id="body_content">
+      ${next.body_content()}
+    </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="${request.static_url('euwe:static/js/chessboard-0.3.0.js')}"></script>
 
     <script type="text/javascript">
     ${next.javascript()}
     </script>
-
-    <div id="board" style="width: 400px"></div>
+    <div class="container">
+      <div id="board" style="width: 400px"></div>
+    </div>
   </body>
 </html>
