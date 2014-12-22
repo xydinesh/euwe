@@ -19,6 +19,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'WebTest',
+    'selenium',
     ]
 
 setup(name='euwe',
