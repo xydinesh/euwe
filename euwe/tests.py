@@ -34,29 +34,43 @@ class TestMyViewSuccessCondition(unittest.TestCase):
         self.assertEqual(info['one'].name, 'one')
         self.assertEqual(info['project'], 'euwe')
 
-
-class TestMyViewFailureCondition(unittest.TestCase):
+class EuweUnitTestViews(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
-        from sqlalchemy import create_engine
-        engine = create_engine('sqlite://')
-        from .models import (
-            Base,
-            MyModel,
-            )
-        DBSession.configure(bind=engine)
 
     def tearDown(self):
-        DBSession.remove()
         testing.tearDown()
 
-    def test_failing_view(self):
-        from .views import my_view
+    def test_login_view(self):
+        from .views import login_view
         request = testing.DummyRequest()
-        info = my_view(request)
-        self.assertEqual(info.status_int, 500)
+        info = login_view(request)
+        self.assertIn('Login', info['title'])
+
 
 class EuweFunctionalTests(unittest.TestCase):
+    def setUp(self):
+        from pyramid.paster import get_app
+        app = get_app('development.ini')
+        from webtest import TestApp
+        self.testapp = TestApp(app)
+        self.config = testing.setUp()
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_home_url(self):
+        res = self.testapp.get('/', status=200)
+        self.assertTrue(b'Euwe' in res.body)
+
+    def test_login_url(self):
+        res = self.testapp.get('/login', status=200)
+        self.assertIn(b'username', res.body)
+        self.assertIn(b'password', res.body)
+
+
+
+class EuweBlackBoxTests(unittest.TestCase):
     # user max logs in by putting his username and password
     # when he logs in he gets tactics to work on
     # he tries and solve the problem
@@ -76,6 +90,10 @@ class EuweFunctionalTests(unittest.TestCase):
 
     def test_username_password(self):
         self.browser.get('http://localhost:6543')
+
+        login_url = self.browser.current_url
+        self.assertIn(login_url, 'login')
+
         inputbox = self.browser.find_element_by_id('id_username')
         self.assertEqual(inputbox.get_atrribute('placeholder'), 'username')
 

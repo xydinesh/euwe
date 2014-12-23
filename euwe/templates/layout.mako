@@ -8,7 +8,7 @@
     <meta name="author" content="Dinesh Weerapurage">
     <link rel="shortcut icon" href="${request.static_url('euwe:static/img/pyramid-16x16.png')}">
 
-    <title>Euwe Chess Tactics Engine for Absolute Begineers.</title>
+    <title>${next.title}</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
