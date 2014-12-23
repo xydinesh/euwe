@@ -8,6 +8,9 @@ from .models import (
     MyModel,
     )
 
+@view_config(route_name='login', renderer='templates/login.mako')
+def login_view(request):
+    return dict(project='euwe', title='Euwe Login Page')
 
 @view_config(route_name='home', renderer='templates/welcome.mako')
 def my_view(request):
