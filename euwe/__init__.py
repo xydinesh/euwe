@@ -1,5 +1,9 @@
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
+
+from .security import group_finder
 
 from .models import (
     DBSession,
@@ -15,6 +19,13 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
     config.include('pyramid_mako')
+
+    authn_policy = AuthTktAuthenticationPolicy(
+    settings['tutorial.secret'], callback=groupfineder,
+    hashalg='sha512')
+    authz_policy = ACLAuthorizationPolicy()
+    config.set_athentication_policy(authn_policy)
+    config.set_authorization_policy(authz_policy)
     config.add_static_view('static', 'static', cache_max_age=60)
     config.add_static_view('img', 'static/img', cache_max_age=60)
     config.add_static_view('js', 'static/js', cache_max_age=60)
