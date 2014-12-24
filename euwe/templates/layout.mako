@@ -8,7 +8,7 @@
     <meta name="author" content="Dinesh Weerapurage">
     <link rel="shortcut icon" href="${request.static_url('euwe:static/img/pyramid-16x16.png')}">
 
-    <title>${next.title}</title>
+    <title>${next.header_title()}</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -28,8 +28,10 @@
   </head>
 
   <body>
-    <div id="body_content">
-      ${next.body_content()}
+    <div class="container">
+      <div id="body_content">
+        ${next.body_content()}
+      </div>
     </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->

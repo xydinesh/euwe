@@ -1,8 +1,9 @@
 <%inherit file="layout.mako" />
 
-<%def name="title()">
+<%def name="header_title()">
 Euwe, Chess tactics engine for absolute beginners
 </%def>
+
 <%def name="body_content()">
 <h1>Welcome to ${project}</h1>
 </%def>
