@@ -4,9 +4,7 @@ import unittest
 import transaction
 
 from pyramid import testing
-
 from .models import DBSession
-
 
 class TestMyViewSuccessCondition(unittest.TestCase):
     def setUp(self):
@@ -27,7 +25,7 @@ class TestMyViewSuccessCondition(unittest.TestCase):
         DBSession.remove()
         testing.tearDown()
 
-    def test_passing_view(self):
+    def passing_view(self):
         from .views import my_view
         request = testing.DummyRequest()
         info = my_view(request)
@@ -45,8 +43,7 @@ class EuweUnitTestViews(unittest.TestCase):
         from .views import login_view
         request = testing.DummyRequest()
         info = login_view(request)
-        self.assertIn('Login', info['title'])
-
+        self.assertEqual('Euwe Login Page', info['title'])
 
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
@@ -65,6 +62,7 @@ class EuweFunctionalTests(unittest.TestCase):
 
     def test_login_url(self):
         res = self.testapp.get('/login', status=200)
+        self.assertIn(b'Euwe Login Page', res.body)
         self.assertIn(b'username', res.body)
         self.assertIn(b'password', res.body)
 
@@ -88,24 +86,26 @@ class EuweBlackBoxTests(unittest.TestCase):
         self.browser.get('http://localhost:6543')
         self.assertIn('Euwe', self.browser.title)
 
-    def test_username_password(self):
-        self.browser.get('http://localhost:6543')
+    def test_login_page(self):
+        self.browser.get('http://localhost:6543/login')
 
-        login_url = self.browser.current_url
-        self.assertIn(login_url, 'login')
+        self.assertIn('Euwe', self.browser.title)
+
+        form = self.browser.find_element_by_tag_name('form')
+        self.assertIn('/login', form.get_attribute('action'))
 
         inputbox = self.browser.find_element_by_id('id_username')
-        self.assertEqual(inputbox.get_atrribute('placeholder'), 'username')
+        self.assertEqual(inputbox.get_attribute('placeholder'), 'username')
 
         password = self.browser.find_element_by_id('id_password')
-        self.assertEqual(password.get_atrribute('placeholder'), '')
+        self.assertEqual(password.get_attribute('placeholder'), 'password')
 
-        submit = self.browser.find_elmement_by_name('submit')
-
+        submit = self.browser.find_element_by_name('submit')
         inputbox.send_keys('max')
-        inputbox.send_keys(Keys.ENTER)
-
         password.send_keys('max123')
-        password.send_keys(Keys.ENTER)
-
         submit.submit()
+
+
+    def test_username_password(self):
+        self.browser.get('http://localhost:6543')
+        login_url = self.browser.current_url
