@@ -19,19 +19,19 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
     config.include('pyramid_mako')
-
     # authentication and authorization
     authn_policy = AuthTktAuthenticationPolicy(settings['tutorial.secret'],
     callback=group_finder, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
-
-    # register views with routes
+    # static properties
     config.add_static_view('static', 'static', cache_max_age=60)
     config.add_static_view('img', 'static/img', cache_max_age=60)
     config.add_static_view('js', 'static/js', cache_max_age=60)
+    # register views with routes
     config.add_route('home', '/')
     config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
     config.scan()
     return config.make_wsgi_app()
