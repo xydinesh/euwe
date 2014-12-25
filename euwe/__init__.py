@@ -33,5 +33,6 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    config.add_route('fen', '/fen')
     config.scan()
     return config.make_wsgi_app()
