@@ -25,24 +25,30 @@ class TestMyViewSuccessCondition(unittest.TestCase):
         DBSession.remove()
         testing.tearDown()
 
-    def passing_view(self):
-        from .views import my_view
+    def test_passing_view(self):
+        from .views import EuweViews
         request = testing.DummyRequest()
-        info = my_view(request)
+        inst = EuweViews(request)
+        info = inst.my_view()
         self.assertEqual(info['one'].name, 'one')
         self.assertEqual(info['project'], 'euwe')
 
 class EuweUnitTestViews(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
+        # this tests throw an exception
+        # found answer here
+        # https://github.com/Pylons/pyramid/issues/1202
+        self.config.add_route('login', '/login')
 
     def tearDown(self):
         testing.tearDown()
 
     def test_login_view(self):
-        from .views import login_view
+        from .views import EuweViews
         request = testing.DummyRequest()
-        info = login_view(request)
+        inst = EuweViews(request)
+        info = inst.login_view()
         self.assertEqual('Euwe Login Page', info['title'])
 
 class EuweFunctionalTests(unittest.TestCase):
@@ -65,6 +71,22 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'Euwe Login Page', res.body)
         self.assertIn(b'username', res.body)
         self.assertIn(b'password', res.body)
+
+    def test_username_password(self):
+        res = self.testapp.get('/login', status=200)
+        form = res.form
+        form['username'] = 'max'
+        form['password'] = 'user_max'
+        res = form.submit('form.submitted')
+        self.assertEqual(res.status_int, 302)
+
+    def test_invalid_username_password(self):
+        res = self.testapp.get('/login', status=200)
+        form = res.form
+        form['username'] = 'max'
+        form['password'] = 'max123'
+        res = form.submit('form.submitted')
+        self.assertIn(b'Invalid Login, Try again', res.body)
 
 
 
@@ -100,7 +122,7 @@ class EuweBlackBoxTests(unittest.TestCase):
         password = self.browser.find_element_by_id('id_password')
         self.assertEqual(password.get_attribute('placeholder'), 'password')
 
-        submit = self.browser.find_element_by_name('submit')
+        submit = self.browser.find_element_by_name('form.submitted')
         inputbox.send_keys('max')
         password.send_keys('max123')
         submit.submit()

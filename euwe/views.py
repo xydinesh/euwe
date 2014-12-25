@@ -1,5 +1,11 @@
 from pyramid.response import Response
 from pyramid.view import view_config
+from pyramid.view import view_defaults
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember
+from pyramid.security import forget
+
+from .security import USERS
 
 from sqlalchemy.exc import DBAPIError
 
@@ -8,17 +14,49 @@ from .models import (
     MyModel,
     )
 
-@view_config(route_name='login', renderer='templates/login.mako')
-def login_view(request):
-    return dict(project='euwe', title='Euwe Login Page')
+@view_defaults(renderer='templates/welcome.mako')
+class EuweViews(object):
+    def __init__(self, request):
+        self.request = request
+        self.logged_in = request.authenticated_userid
 
-@view_config(route_name='home', renderer='templates/welcome.mako')
-def my_view(request):
-    try:
-        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'euwe'}
+    @view_config(route_name='login', renderer='templates/login.mako')
+    def login_view(self):
+        """
+        view for handling login
+        """
+        request = self.request
+        login_url = request.route_url('login')
+        referrer = request.url
+        if referrer == login_url:
+            referrer = '/'
+
+        came_from = request.params.get('came_from', referrer)
+        message = ''
+        username = 'username'
+        password = 'password'
+
+        if 'form.submitted' in request.params:
+            username = request.params['username']
+            password = request.params['password']
+            if USERS.get(username) == password:
+                headers = remember(request, username)
+                return HTTPFound(location=came_from, headers=headers)
+
+        message = 'Invalid Login, Try again'
+
+        return dict(project='euwe', title='Euwe Login Page',
+                url=request.application_url + '/login',
+                came_from=came_from, message=message,
+                username=username, password=password)
+
+    @view_config(route_name='home')
+    def my_view(self):
+        try:
+            one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
+        except DBAPIError:
+            return Response(conn_err_msg, content_type='text/plain', status_int=500)
+        return {'one': one, 'project': 'euwe'}
 
 
 conn_err_msg = """\
