@@ -25,6 +25,7 @@ def _initDB():
     return DBSession
 
 class TestMyViewSuccessCondition(unittest.TestCase):
+
     def setUp(self):
         self.config = testing.setUp()
         self.session = _initDB()
@@ -41,9 +42,8 @@ class TestMyViewSuccessCondition(unittest.TestCase):
         self.assertEqual(info['one'].name, 'one')
         self.assertEqual(info['project'], 'euwe')
 
-
-
 class EuweUnitTestViews(unittest.TestCase):
+
     def setUp(self):
         self.config = testing.setUp()
         self.session = _initDB()
@@ -89,8 +89,18 @@ class EuweUnitTestViews(unittest.TestCase):
 
     def test_position_model(self):
         from .models import PositionModel
-        self.assertTrue(True)
+        pos = self.session.query(PositionModel).filter_by(id=1).first()
+        self.assertTrue(pos.fen, b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
 
+    def test_fen_view(self):
+        self.config.add_route('home', '/')
+        self.config.add_route('fen', '/fen')
+        from .views import EuweViews
+        request = testing.DummyRequest(params={'id': 1})
+        inst = EuweViews(request)
+        info = inst.fen_view()
+        pos = info['position']
+        self.assertTrue(pos.fen, b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
 
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
