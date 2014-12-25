@@ -20,12 +20,14 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.include('pyramid_mako')
 
-    authn_policy = AuthTktAuthenticationPolicy(
-    settings['tutorial.secret'], callback=groupfineder,
-    hashalg='sha512')
+    # authentication and authorization
+    authn_policy = AuthTktAuthenticationPolicy(settings['tutorial.secret'],
+    callback=group_finder, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
-    config.set_athentication_policy(authn_policy)
+    config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
+
+    # register views with routes
     config.add_static_view('static', 'static', cache_max_age=60)
     config.add_static_view('img', 'static/img', cache_max_age=60)
     config.add_static_view('js', 'static/js', cache_max_age=60)
