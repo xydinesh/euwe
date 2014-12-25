@@ -12,6 +12,7 @@ from sqlalchemy.exc import DBAPIError
 from .models import (
     DBSession,
     MyModel,
+    PositionModel,
     )
 
 @view_defaults(renderer='templates/welcome.mako')
@@ -49,6 +50,24 @@ class EuweViews(object):
                 url=request.application_url + '/login',
                 came_from=came_from, message=message,
                 username=username, password=password)
+
+    @view_config(route_name='logout')
+    def logout_view(self):
+        request = self.request
+        headers = forget(request)
+        url = request.route_url('home')
+        return HTTPFound(location=url, headers=headers)
+
+    @view_config(route_name='fen')
+    def fen_view(self):
+        try:
+            request = self.request
+            id = request.params.get('id', -1)
+            pos = DBSession.query(PositionModel).filter_by(id=id).first()
+        except DBAPIError:
+            return Response(conn_err_msg, content_type='text/plain', status_int=500)
+        return dict(project='euwe',
+                position=pos)
 
     @view_config(route_name='home')
     def my_view(self):
