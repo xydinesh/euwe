@@ -20,6 +20,7 @@ requires = [
     'waitress',
     'WebTest',
     'selenium',
+    'nose',
     ]
 
 setup(name='euwe',
