@@ -66,8 +66,7 @@ class EuweViews(object):
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return dict(project='euwe',
-                position=pos)
+        return dict(project='euwe', position=pos)
 
     @view_config(route_name='home')
     def my_view(self):

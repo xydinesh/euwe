@@ -54,6 +54,7 @@ class PositionModel(Base):
     pgn = Column(Text)
     created = Column(DateTime)
     modified = Column(DateTime)
+    category_key = ''
 
     categories = {
         'game': 1,
@@ -68,10 +69,10 @@ class PositionModel(Base):
             self.fen = fen
         if pgn:
             self.pgn = pgn
-            
+
         self.category = self.categories[category]
         self.created = datetime.utcnow()
         self.modified = datetime.utcnow()
 
     def __repr__(self):
-        return b'Position <{0} {1}>'.format()
+        return 'Position <{0} {1}>'.format(self.id, self.category_key)

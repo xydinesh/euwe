@@ -143,6 +143,14 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.get('/logout', status=302)
         self.assertEqual(res.status_int, 302)
 
+    def test_fen_url(self):
+        res = self.testapp.get('/fen', params={'id': 1}, status=200)
+        self.assertIn(b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R', res.body)
+
+    def test_fen_url_invalid_id(self):
+        res = self.testapp.get('/fen', params={'id': 150}, status=200)
+        self.assertIn(b'start', res.body)
+
 
 
 class EuweBlackBoxTests(unittest.TestCase):

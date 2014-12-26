@@ -12,7 +12,18 @@ Euwe, Chess tactics engine for absolute beginners
 var init = function() {
 
 //--- start example JS ---
-var board = new ChessBoard('board', 'start');
+var cfg = {
+  draggable: true,
+  dropOffBoard: 'snapback', // this is the default
+  position: 'start'
+};
+
+%if position is not UNDEFINED:
+%if position:
+cfg["position"] = "${position.fen}"
+%endif
+%endif
+var board = new ChessBoard('board', cfg);
 //--- end example JS ---
 
 }; // end init()
