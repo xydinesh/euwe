@@ -19,9 +19,9 @@ var cfg = {
 };
 
 %if position is not UNDEFINED:
-%if position:
-cfg["position"] = "${position.fen}"
-%endif
+  %if position:
+  cfg["position"] = "${position.fen}"
+  %endif
 %endif
 var board = new ChessBoard('board', cfg);
 //--- end example JS ---

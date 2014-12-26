@@ -162,7 +162,6 @@ class EuweBlackBoxTests(unittest.TestCase):
     # he still can not do this, decide to try later
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -190,7 +189,33 @@ class EuweBlackBoxTests(unittest.TestCase):
         password.send_keys('max123')
         submit.submit()
 
+    def test_fen_page(self):
+        self.browser.get('http://localhost:6543/fen?id=1')
+        self.assertIn('Euwe', self.browser.title)
+        self.assertIn('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
+        self.browser.page_source)
+        self.browser.quit()
 
-    def test_username_password(self):
-        self.browser.get('http://localhost:6543')
-        login_url = self.browser.current_url
+        self.browser = webdriver.Firefox()
+        self.browser.get('http://localhost:6543/fen?id=100')
+        self.assertNotIn('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
+        self.browser.page_source)
+
+    def test_edit_page(self):
+        self.browser.get('http://localhost:6543/positions/edit')
+        self.assertIn('Euwe', self.browser.title)
+
+        btn_start = self.browser.find_element_by_id('id_btn_start')
+        self.assertEqual(btn_start.get_attribute('value'), 'Start Position')
+
+        btn_clear = self.browser.find_element_by_id('id_btn_clear')
+        self.assertEqual(btn_clear.get_attribute('value'), 'Clear')
+
+        btn_save = self.browser.find_element_by_id('id_btn_save')
+        self.assertEqual(btn_save.get_attribute('value'), 'Save')
+
+        text_area = self.browser.find_element_by_id('id_text_area')
+        self.assertEqual(text_area.get_attribute('col'), '100')
+        self.assertEqual(text_area.get_attribute('height'), '20')
+
+        self.fail('Finish position edit !')
