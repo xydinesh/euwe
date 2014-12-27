@@ -102,6 +102,13 @@ class EuweUnitTestViews(unittest.TestCase):
         pos = info['position']
         self.assertTrue(pos.fen, b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
 
+    def test_edit_view(self):
+        from .views import EuweViews
+        request = testing.DummyRequest()
+        inst = EuweViews(request)
+        info = inst.edit_view()
+        self.assertTrue(info is not None)
+
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
@@ -150,6 +157,13 @@ class EuweFunctionalTests(unittest.TestCase):
     def test_fen_url_invalid_id(self):
         res = self.testapp.get('/fen', params={'id': 150}, status=200)
         self.assertIn(b'start', res.body)
+
+    def test_edit_url_valid(self):
+        res = self.testapp.get('/positions/edit')
+        self.assertIn(b'id_btn_start', res.body)
+        self.assertIn(b'id_btn_clean', res.body)
+        self.assertIn(b'id_btn_save', res.body)
+        self.assertIn(b'id_text_area', res.body)
 
 
 

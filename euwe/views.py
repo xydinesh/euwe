@@ -68,6 +68,13 @@ class EuweViews(object):
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         return dict(project='euwe', position=pos)
 
+    @view_config(route_name='edit', renderer='templates/edit.mako')
+    def edit_view(self):
+        request = self.request
+        return dict(project='euwe', title='Euwe Edit Position',
+                url=request.application_url + '/positons/edit',
+                message='')
+
     @view_config(route_name='home')
     def my_view(self):
         try:
