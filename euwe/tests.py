@@ -5,6 +5,7 @@ import transaction
 
 from pyramid import testing
 from .models import DBSession
+from unittest.mock import patch
 
 def _initDB():
     from sqlalchemy import create_engine
@@ -20,9 +21,31 @@ def _initDB():
         model = MyModel(name='one', value=55)
         DBSession.add(model)
 
-        position = PositionModel(category='position', fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
+        position = PositionModel(category='position',
+        fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
         DBSession.add(position)
     return DBSession
+
+class DummyAuthenticationPolicy(object):
+    def __init__(self, userid, extra_principals=()):
+        self.userid = userid
+        self.extra_principals = extra_principals
+
+    def authenticated_userid(self, request):
+        return self.userid
+
+    def effective_principals(self, request):
+        principals = [Everyone]
+        if self.userid:
+            principals += [Authenticated]
+            principals += list(self.extra_principals)
+        return principals
+
+    def remember(self, request, userid, **kw):
+        return []
+
+    def forget(self, request):
+        return []
 
 class TestMyViewSuccessCondition(unittest.TestCase):
 
@@ -45,7 +68,13 @@ class TestMyViewSuccessCondition(unittest.TestCase):
 class EuweUnitTestViews(unittest.TestCase):
 
     def setUp(self):
+        from pyramid.authentication import AuthTktAuthenticationPolicy
+        from pyramid.authorization import ACLAuthorizationPolicy
         self.config = testing.setUp()
+        authn_policy = DummyAuthenticationPolicy(userid='xydinesh')
+        authz_policy = ACLAuthorizationPolicy()
+        self.config.set_authorization_policy(authz_policy)
+        self.config.set_authentication_policy(authn_policy)
         self.session = _initDB()
 
     def tearDown(self):
@@ -70,7 +99,8 @@ class EuweUnitTestViews(unittest.TestCase):
         # https://github.com/Pylons/pyramid/issues/1202
         self.config.add_route('login', '/login')
         from .views import EuweViews
-        request = testing.DummyRequest(params={'username': 'max', 'password': 'user_max', 'form.submitted': True})
+        request = testing.DummyRequest(params={'username': 'max',
+        'password': 'user_max', 'form.submitted': True})
         inst = EuweViews(request)
         info = inst.login_view()
         self.assertEqual(info.status_int, 302)
@@ -108,6 +138,13 @@ class EuweUnitTestViews(unittest.TestCase):
         inst = EuweViews(request)
         info = inst.edit_view()
         self.assertTrue(info is not None)
+
+    def test_perosna_login(self):
+        from .views import EuweViews
+        request = testing.DummyRequest()
+        inst = EuweViews(request)
+        info = inst.hello_world()
+        print(info)
 
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):

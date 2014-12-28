@@ -23,7 +23,7 @@ def main(global_config, **settings):
     config.include('pyramid_persona')
 
     # authentication and authorization
-    authn_policy = AuthTktAuthenticationPolicy(settings['tutorial.secret'],
+    authn_policy = AuthTktAuthenticationPolicy(settings['persona.secret'],
     callback=group_finder, hashalg='sha512')
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authn_policy)
@@ -40,5 +40,6 @@ def main(global_config, **settings):
     config.add_route('logout', '/logout')
     config.add_route('fen', '/fen')
     config.add_route('edit', '/edit')
+    config.add_route('hello', '/hello')
     config.scan()
     return config.make_wsgi_app()

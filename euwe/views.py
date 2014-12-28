@@ -16,6 +16,7 @@ from .models import (
     PositionModel,
     )
 
+
 @view_defaults(renderer='templates/welcome.mako')
 class EuweViews(object):
     def __init__(self, request):
@@ -63,6 +64,10 @@ class EuweViews(object):
     def fen_view(self):
         try:
             request = self.request
+            userid = authenticated_userid(request)
+            if userid is None:
+                raise Forbidden()
+
             id = request.params.get('id', -1)
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
@@ -72,6 +77,10 @@ class EuweViews(object):
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
         request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+            
         return dict(project='euwe', title='Euwe Edit Position',
                 url=request.application_url + '/edit',
                 message='')
@@ -79,13 +88,23 @@ class EuweViews(object):
     @view_config(route_name='home')
     def my_view(self):
         try:
-            userid = authenticated_userid(self.request)
+            request = self.request
+            userid = authenticated_userid(request)
             if userid is None:
-                return Forbidden()
+                raise Forbidden()
             one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         return {'one': one, 'project': 'euwe', 'user': userid}
+
+    @view_config(route_name='hello', renderer='json')
+    def hello_world(self):
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+        return Response('Hello %s!' % (userid,))
+
 
 
 conn_err_msg = """\
