@@ -80,7 +80,6 @@ class EuweViews(object):
         userid = authenticated_userid(request)
         if userid is None:
             raise Forbidden()
-            
         return dict(project='euwe', title='Euwe Edit Position',
                 url=request.application_url + '/edit',
                 message='')

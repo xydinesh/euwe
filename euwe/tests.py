@@ -137,14 +137,14 @@ class EuweUnitTestViews(unittest.TestCase):
         request = testing.DummyRequest()
         inst = EuweViews(request)
         info = inst.edit_view()
-        self.assertTrue(info is not None)
+        self.assertTrue('Edit' in info['title'])
 
     def test_perosna_login(self):
         from .views import EuweViews
         request = testing.DummyRequest()
         inst = EuweViews(request)
         info = inst.hello_world()
-        print(info)
+        self.assertIn(b'xydinesh', info.body)
 
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
