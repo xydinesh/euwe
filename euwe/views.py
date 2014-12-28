@@ -81,7 +81,7 @@ class EuweViews(object):
         try:
             userid = authenticated_userid(self.request)
             if userid is None:
-                return Forbidden()
+                raise Forbidden()
             one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
