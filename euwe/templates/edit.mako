@@ -4,18 +4,21 @@
 ${title}
 </%def>
 
-<%def name="body_content()">
+<%def name="body_content_before_board()">
 <h1>Welcome to ${project}</h1>
 <div id="message">
 ${message}
 </div>
+</%def>
 
-<form method='POST' action='/positons/edit'>
-  <button class='btn btn-primary' id='id_btn_start'>Start</button>
-  <button class="btn btn-primary" id="id_btn_clean">Clean</button>
+<%def name="body_content_after_board()">
+<form method='POST' action='/edit'>
   <button class="btn btn-primary" id="id_btn_save">Save</button>
-  <div id="id_text_area"></div>
 </form>
+<button class='btn btn-primary' id='id_btn_start'>Start Position</button>
+<button class="btn btn-primary" id="id_btn_clear">Clear</button>
+<button class="btn btn-primary" id='id_btn_flip'>Flip Board</button>
+<textarea id="id_text_area" value=""></textarea>
 </%def>
 
 <%def name="javascript()">
@@ -25,7 +28,8 @@ var init = function() {
   var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    position: 'start'
+    position: 'start',
+    sparePieces: true
   };
 
   %if position is not UNDEFINED:
@@ -34,6 +38,10 @@ var init = function() {
   %endif
   %endif
   var board = new ChessBoard('board', cfg);
+
+  $('#id_btn_start').on('click', board.start);
+  $('#id_btn_clear').on('click', board.clear);
+  $('#id_btn_flip').on('click', board.flip)
   //--- end example JS ---
 
   }; // end init()

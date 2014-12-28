@@ -21,6 +21,7 @@ requires = [
     'WebTest',
     'selenium',
     'nose',
+    'pyramid_persona',
     ]
 
 setup(name='euwe',

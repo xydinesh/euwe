@@ -4,8 +4,11 @@
 Euwe, Chess tactics engine for absolute beginners
 </%def>
 
-<%def name="body_content()">
-<h1>Welcome to ${project}</h1>
+<%def name="body_content_before_board()">
+<h1>Welcome to ${project}, ${user}</h1>
+</%def>
+
+<%def name="body_content_after_board()">
 </%def>
 
 <%def name="javascript()">

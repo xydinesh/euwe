@@ -26,11 +26,18 @@
       <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
-
   <body>
     <div class="container">
-      <div id="body_content">
-        ${next.body_content()}
+      <div class="row">
+        <div id="body_content_before">
+          ${next.body_content_before_board()}
+        </div>
+        <div id="board-container">
+          <div id="board" style="width: 400px"></div>
+        </div>
+        <div id="body_content_after">
+          ${next.body_content_after_board()}
+        </div>
       </div>
     </div>
     <!-- Bootstrap core JavaScript
@@ -39,12 +46,8 @@
     <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="${request.static_url('euwe:static/js/chessboard-0.3.0.js')}"></script>
-
     <script type="text/javascript">
-    ${next.javascript()}
+      ${next.javascript()}
     </script>
-    <div class="container">
-      <div id="board" style="width: 400px"></div>
-    </div>
   </body>
 </html>

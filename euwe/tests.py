@@ -121,7 +121,7 @@ class EuweFunctionalTests(unittest.TestCase):
         testing.tearDown()
 
     def test_home_url(self):
-        res = self.testapp.get('/', status=200)
+        res = self.testapp.get('/', status=403)
         self.assertTrue(b'Euwe' in res.body)
 
     def test_login_url(self):
@@ -159,12 +159,17 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'start', res.body)
 
     def test_edit_url_valid(self):
-        res = self.testapp.get('/positions/edit')
+        res = self.testapp.get('/edit')
         self.assertIn(b'id_btn_start', res.body)
-        self.assertIn(b'id_btn_clean', res.body)
+        self.assertIn(b'id_btn_clear', res.body)
         self.assertIn(b'id_btn_save', res.body)
         self.assertIn(b'id_text_area', res.body)
+        self.assertIn(b'id_btn_flip', res.body)
+        self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
 
+    def test_forbidden_view(self):
+        res = self.testapp.get('/', status=403)
+        self.assertIn(b'Forbidden', res.body)
 
 
 class EuweBlackBoxTests(unittest.TestCase):
@@ -216,7 +221,7 @@ class EuweBlackBoxTests(unittest.TestCase):
         self.browser.page_source)
 
     def test_edit_page(self):
-        self.browser.get('http://localhost:6543/positions/edit')
+        self.browser.get('http://localhost:6543/edit')
         self.assertIn('Euwe', self.browser.title)
 
         btn_start = self.browser.find_element_by_id('id_btn_start')

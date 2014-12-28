@@ -4,7 +4,8 @@ from pyramid.view import view_defaults
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 from pyramid.security import forget
-
+from pyramid.security import authenticated_userid
+from pyramid.exceptions import Forbidden
 from .security import USERS
 
 from sqlalchemy.exc import DBAPIError
@@ -66,22 +67,25 @@ class EuweViews(object):
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return dict(project='euwe', position=pos)
+        return dict(project='euwe', position=pos, user='')
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
         request = self.request
         return dict(project='euwe', title='Euwe Edit Position',
-                url=request.application_url + '/positons/edit',
+                url=request.application_url + '/edit',
                 message='')
 
     @view_config(route_name='home')
     def my_view(self):
         try:
+            userid = authenticated_userid(self.request)
+            if userid is None:
+                return Forbidden()
             one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return {'one': one, 'project': 'euwe'}
+        return {'one': one, 'project': 'euwe', 'user': userid}
 
 
 conn_err_msg = """\

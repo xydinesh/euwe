@@ -20,6 +20,8 @@ def main(global_config, **settings):
     config = Configurator(settings=settings,
                           root_factory='euwe.models.RootFactory')
     config.include('pyramid_mako')
+    config.include('pyramid_persona')
+
     # authentication and authorization
     authn_policy = AuthTktAuthenticationPolicy(settings['tutorial.secret'],
     callback=group_finder, hashalg='sha512')
@@ -37,6 +39,6 @@ def main(global_config, **settings):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('fen', '/fen')
-    config.add_route('edit', '/positions/edit')
+    config.add_route('edit', '/edit')
     config.scan()
     return config.make_wsgi_app()
