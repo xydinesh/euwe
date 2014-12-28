@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 import transaction
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 
 from pyramid import testing
 from .models import DBSession
@@ -68,8 +70,6 @@ class TestMyViewSuccessCondition(unittest.TestCase):
 class EuweUnitTestViews(unittest.TestCase):
 
     def setUp(self):
-        from pyramid.authentication import AuthTktAuthenticationPolicy
-        from pyramid.authorization import ACLAuthorizationPolicy
         self.config = testing.setUp()
         authn_policy = DummyAuthenticationPolicy(userid='xydinesh')
         authz_policy = ACLAuthorizationPolicy()
@@ -146,7 +146,7 @@ class EuweUnitTestViews(unittest.TestCase):
         info = inst.hello_world()
         self.assertIn(b'xydinesh', info.body)
 
-class EuweFunctionalTests(unittest.TestCase):
+class EuweFunctionalAuthTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
         app = get_app('development.ini')
@@ -156,10 +156,6 @@ class EuweFunctionalTests(unittest.TestCase):
 
     def tearDown(self):
         testing.tearDown()
-
-    def test_home_url(self):
-        res = self.testapp.get('/', status=403)
-        self.assertTrue(b'Euwe' in res.body)
 
     def test_login_url(self):
         res = self.testapp.get('/login', status=200)
@@ -187,6 +183,32 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.get('/logout', status=302)
         self.assertEqual(res.status_int, 302)
 
+    def test_forbidden_view(self):
+        res = self.testapp.get('/', status=403)
+        self.assertIn(b'Forbidden', res.body)
+
+
+
+class EuweFunctionalTests(unittest.TestCase):
+    def setUp(self):
+        from pyramid.paster import get_app
+        app = get_app('development.ini')
+        from webtest import TestApp
+        self.testapp = TestApp(app)
+        self.config = testing.setUp()
+        res = self.testapp.get('/login', status=200)
+        form = res.form
+        form['username'] = 'max'
+        form['password'] = 'user_max'
+        res = form.submit('form.submitted')
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_home_url(self):
+        res = self.testapp.get('/', status=200)
+        self.assertTrue(b'Euwe' in res.body)
+
     def test_fen_url(self):
         res = self.testapp.get('/fen', params={'id': 1}, status=200)
         self.assertIn(b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R', res.body)
@@ -203,10 +225,6 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'id_text_area', res.body)
         self.assertIn(b'id_btn_flip', res.body)
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
-
-    def test_forbidden_view(self):
-        res = self.testapp.get('/', status=403)
-        self.assertIn(b'Forbidden', res.body)
 
 
 class EuweBlackBoxTests(unittest.TestCase):
