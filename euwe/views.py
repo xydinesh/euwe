@@ -91,7 +91,9 @@ class EuweViews(object):
         position = PositionModel(category='position', userid=userid, fen=fen)
         DBSession.add(position)
         position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
-        return dict(status='Found', status_int='302', id=position.id)
+
+        url = request.route_url('home')
+        return HTTPFound(location=url)
 
     @view_config(route_name='home')
     def my_view(self):

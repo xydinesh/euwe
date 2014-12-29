@@ -12,7 +12,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form method='POST'>
+<form method='POST' action='/save'>
   <button class="btn btn-primary" id="id_btn_save" name="form.saved">Save</button>
 </form>
 <button class='btn btn-primary' id='id_btn_start'>Start Position</button>
@@ -41,13 +41,18 @@ var init = function() {
 
   $('#id_btn_start').on('click', board.start);
   $('#id_btn_clear').on('click', board.clear);
-  $('#id_btn_flip').on('click', board.flip)
+  $('#id_btn_flip').on('click', board.flip);
 
   $('#id_btn_save').click(function(){
-    $.post("/edit",function(data,status){
-      console.log(board.fen())
+    $.ajax({
+      type: "POST",
+      url: '/save',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ 'fen': board.fen() }),
+      dataType: 'json',
+      success: function(data) {alert(data);}
+      });
     });
-  });
 
   //--- end example JS ---
 
