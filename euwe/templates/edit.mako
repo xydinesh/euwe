@@ -12,7 +12,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form method='POST' action='/save'>
+<form method='POST'>
   <button class="btn btn-primary" id="id_btn_save" name="form.saved">Save</button>
 </form>
 <button class='btn btn-primary' id='id_btn_start'>Start Position</button>

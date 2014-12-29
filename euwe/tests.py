@@ -241,10 +241,7 @@ class EuweFunctionalTests(unittest.TestCase):
     def test_save_url(self):
         import json
         res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
-        result = json.loads(res.body.decode('UTF-8'))
-        self.assertIn(b'id', res.body)
-        self.assertEqual(2, result['id'])
-
+        self.assertIn(b'redirect', res.body)
 
 class EuweBlackBoxTests(unittest.TestCase):
     # user max logs in by putting his username and password
