@@ -19,6 +19,7 @@ from .models import (
 
 @view_defaults(renderer='templates/welcome.mako')
 class EuweViews(object):
+    
     def __init__(self, request):
         self.request = request
         self.logged_in = request.authenticated_userid
@@ -72,7 +73,7 @@ class EuweViews(object):
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return dict(project='euwe', position=pos, user='')
+        return dict(project='euwe', position=pos, user=userid)
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
@@ -82,7 +83,7 @@ class EuweViews(object):
             raise Forbidden()
         return dict(project='euwe', title='Euwe Edit Position',
                 url=request.application_url + '/edit',
-                message='')
+                message='', user=userid)
 
     @view_config(route_name='home')
     def my_view(self):

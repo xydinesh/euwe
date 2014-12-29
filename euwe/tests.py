@@ -187,8 +187,6 @@ class EuweFunctionalAuthTests(unittest.TestCase):
         res = self.testapp.get('/', status=403)
         self.assertIn(b'Forbidden', res.body)
 
-
-
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
