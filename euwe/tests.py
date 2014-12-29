@@ -24,6 +24,7 @@ def _initDB():
         DBSession.add(model)
 
         position = PositionModel(category='position',
+        userid='xydinesh@gmail.com',
         fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
         DBSession.add(position)
     return DBSession
@@ -122,6 +123,11 @@ class EuweUnitTestViews(unittest.TestCase):
         pos = self.session.query(PositionModel).filter_by(id=1).first()
         self.assertTrue(pos.fen, b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
 
+    def test_position_model_email(self):
+        from .models import PositionModel
+        pos = self.session.query(PositionModel).filter_by(userid='xydinesh@gmail.com').first()
+        self.assertTrue(pos.fen, b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
+
     def test_fen_view(self):
         self.config.add_route('home', '/')
         self.config.add_route('fen', '/fen')
@@ -138,6 +144,14 @@ class EuweUnitTestViews(unittest.TestCase):
         inst = EuweViews(request)
         info = inst.edit_view()
         self.assertTrue('Edit' in info['title'])
+
+    def test_save_view_fail(self):
+        from .views import EuweViews
+        from pyramid.httpexceptions import HTTPMethodNotAllowed
+        request = testing.DummyRequest(params={'fen': 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R'})
+        inst = EuweViews(request)
+        res = inst.save_view()
+        self.assertEqual(res.__class__, HTTPMethodNotAllowed)
 
     def test_perosna_login(self):
         from .views import EuweViews
@@ -223,6 +237,13 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'id_text_area', res.body)
         self.assertIn(b'id_btn_flip', res.body)
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
+
+    def test_save_url(self):
+        import json
+        res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
+        result = json.loads(res.body.decode('UTF-8'))
+        self.assertIn(b'id', res.body)
+        self.assertEqual(2, result['id'])
 
 
 class EuweBlackBoxTests(unittest.TestCase):

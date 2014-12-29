@@ -12,8 +12,8 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form method='POST' action='/edit'>
-  <button class="btn btn-primary" id="id_btn_save">Save</button>
+<form method='POST'>
+  <button class="btn btn-primary" id="id_btn_save" name="form.saved">Save</button>
 </form>
 <button class='btn btn-primary' id='id_btn_start'>Start Position</button>
 <button class="btn btn-primary" id="id_btn_clear">Clear</button>
@@ -42,6 +42,13 @@ var init = function() {
   $('#id_btn_start').on('click', board.start);
   $('#id_btn_clear').on('click', board.clear);
   $('#id_btn_flip').on('click', board.flip)
+
+  $('#id_btn_save').click(function(){
+    $.post("/edit",function(data,status){
+      console.log(board.fen())
+    });
+  });
+
   //--- end example JS ---
 
   }; // end init()

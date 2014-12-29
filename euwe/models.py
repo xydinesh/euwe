@@ -43,8 +43,9 @@ Index('my_index', MyModel.name, unique=True, mysql_length=255)
 
 class PositionModel(Base):
     __tablename__ = 'tbl_positions'
-    id = Column(Integer, primary_key=True)
-    fen = Column(String(128))
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    userid = Column(String(256), index=True)
+    fen = Column(String(128), index=True)
     category = Column(Integer)
     hint = Column(String(128))
     instructions = Column(String(1024))
@@ -63,8 +64,9 @@ class PositionModel(Base):
         'analysis': 4,
     }
 
-    def __init__(self, category, fen=None, pgn=None):
+    def __init__(self, userid, category, fen=None, pgn=None):
         self.category_key = category
+        self.userid = userid
         if fen:
             self.fen = fen
         if pgn:
@@ -75,4 +77,4 @@ class PositionModel(Base):
         self.modified = datetime.utcnow()
 
     def __repr__(self):
-        return 'Position <{0} {1}>'.format(self.id, self.category_key)
+        return 'Position <{0} {1} {2}>'.format(self.id, self.userid, self.category_key)

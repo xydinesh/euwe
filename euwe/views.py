@@ -1,20 +1,13 @@
 from pyramid.response import Response
-from pyramid.view import view_config
-from pyramid.view import view_defaults
-from pyramid.httpexceptions import HTTPFound
-from pyramid.security import remember
-from pyramid.security import forget
-from pyramid.security import authenticated_userid
 from pyramid.exceptions import Forbidden
+from pyramid.view import (view_config,
+view_defaults)
+from pyramid.security import (remember, forget, authenticated_userid)
+from pyramid.httpexceptions import (exception_response, HTTPMethodNotAllowed, HTTPFound)
 from .security import USERS
-
+from .models import (DBSession, MyModel, PositionModel)
 from sqlalchemy.exc import DBAPIError
-
-from .models import (
-    DBSession,
-    MyModel,
-    PositionModel,
-    )
+import transaction
 
 
 @view_defaults(renderer='templates/welcome.mako')
@@ -84,6 +77,22 @@ class EuweViews(object):
                 url=request.application_url + '/edit',
                 message='', user=userid)
 
+    @view_config(route_name='save', renderer='json')
+    def save_view(self):
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+
+        if request.method != 'POST':
+            return HTTPMethodNotAllowed()
+
+        fen = request.json_body['fen']
+        position = PositionModel(category='position', userid=userid, fen=fen)
+        DBSession.add(position)
+        position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
+        return dict(status='Found', status_int='302', id=position.id)
+
     @view_config(route_name='home')
     def my_view(self):
         try:
@@ -103,8 +112,6 @@ class EuweViews(object):
         if userid is None:
             raise Forbidden()
         return Response('Hello %s!' % (userid,))
-
-
 
 conn_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem
