@@ -160,6 +160,20 @@ class EuweUnitTestViews(unittest.TestCase):
         info = inst.hello_world()
         self.assertIn(b'xydinesh', info.body)
 
+    def test_list_view(self):
+        from .views import EuweViews
+        request = testing.DummyRequest()
+        inst = EuweViews(request)
+        res = inst.list_view()
+        self.assertIn('List', res['title'])
+
+    def test_positions_view(self):
+        from .views import EuweViews
+        request = testing.DummyRequest()
+        inst = EuweViews(request)
+        res = inst.position_view()
+        self.assertIn('Position', res['title'])
+
 class EuweFunctionalAuthTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
@@ -242,6 +256,16 @@ class EuweFunctionalTests(unittest.TestCase):
         import json
         res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
         self.assertIn(b'redirect', res.body)
+
+    def test_list_url(self):
+        res = self.testapp.get('/list')
+        self.assertIn(b'table', res.body)
+
+    def test_show_position(self):
+        res = self.testapp.get('/positions', params={'id': 38})
+        self.assertIn(b'board', res.body)
+
+
 
 class EuweBlackBoxTests(unittest.TestCase):
     # user max logs in by putting his username and password

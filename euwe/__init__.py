@@ -35,5 +35,7 @@ def main(global_config, **settings):
     config.add_route('edit', '/edit')
     config.add_route('hello', '/hello')
     config.add_route('save', '/save')
+    config.add_route('list', '/list')
+    config.add_route('positions', '/positions')
     config.scan()
     return config.make_wsgi_app()

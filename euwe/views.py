@@ -95,6 +95,22 @@ class EuweViews(object):
         url = request.route_url('home')
         return HTTPFound(location=url)
 
+    @view_config(route_name='positions', renderer='templates/list.mako')
+    @view_config(route_name='list', renderer='templates/list.mako')
+    def list_view(self):
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+
+        id = request.params.get('id', None)
+        if id is None:
+            positions = DBSession.query(PositionModel).filter_by(userid=userid).all()
+        else:
+            positions = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+        return dict(project='euwe', title='Euwe List Positions',
+        message='', userid=userid, positions=positions)
+
     @view_config(route_name='home')
     def my_view(self):
         try:
