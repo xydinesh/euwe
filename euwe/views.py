@@ -63,11 +63,14 @@ class EuweViews(object):
     def fen_view(self):
         try:
             request = self.request
+            userid = authenticated_userid(request)
+            if userid is None:
+                raise Forbidden()
             id = request.params.get('id', -1)
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return dict(project='euwe', position=pos, user='')
+        return dict(project='euwe', position=pos, user=userid)
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
