@@ -19,7 +19,7 @@ from .models import (
 
 @view_defaults(renderer='templates/welcome.mako')
 class EuweViews(object):
-    
+
     def __init__(self, request):
         self.request = request
         self.logged_in = request.authenticated_userid
@@ -68,7 +68,6 @@ class EuweViews(object):
             userid = authenticated_userid(request)
             if userid is None:
                 raise Forbidden()
-
             id = request.params.get('id', -1)
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:

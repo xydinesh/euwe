@@ -71,10 +71,10 @@ class EuweUnitTestViews(unittest.TestCase):
 
     def setUp(self):
         self.config = testing.setUp()
-        authn_policy = DummyAuthenticationPolicy(userid='xydinesh')
-        authz_policy = ACLAuthorizationPolicy()
-        self.config.set_authorization_policy(authz_policy)
-        self.config.set_authentication_policy(authn_policy)
+        # authn_policy = DummyAuthenticationPolicy(userid='xydinesh')
+        # authz_policy = ACLAuthorizationPolicy()
+        # self.config.set_authorization_policy(authz_policy)
+        # self.config.set_authentication_policy(authn_policy)
         self.session = _initDB()
 
     def tearDown(self):
