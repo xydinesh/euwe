@@ -3,7 +3,11 @@ from pyramid.exceptions import Forbidden
 from pyramid.view import (view_config,
 view_defaults)
 from pyramid.security import (remember, forget, authenticated_userid)
-from pyramid.httpexceptions import (exception_response, HTTPMethodNotAllowed, HTTPFound)
+from pyramid.httpexceptions import (
+exception_response,
+HTTPMethodNotAllowed,
+HTTPBadRequest,
+HTTPFound)
 from .security import USERS
 from .models import (DBSession, MyModel, PositionModel)
 from sqlalchemy.exc import DBAPIError
@@ -26,7 +30,7 @@ class EuweViews(object):
         login_url = request.route_url('login')
         referrer = request.url
         if referrer == login_url:
-            referrer = '/'
+            referrer = '/list'
 
         came_from = request.params.get('came_from', referrer)
         message = ''
@@ -107,9 +111,31 @@ class EuweViews(object):
         if id is None:
             positions = DBSession.query(PositionModel).filter_by(userid=userid).all()
         else:
-            positions = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+            positions = DBSession.query(PositionModel).filter_by(userid=userid, id=id).all()
         return dict(project='euwe', title='Euwe List Positions',
         message='', userid=userid, positions=positions)
+
+    @view_config(route_name='delete')
+    def delete_view(self):
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+
+        if request.method != 'DELETE':
+            raise HTTPMethodNotAllowed()
+
+        came_from = request.params.get('came_from', '/list')
+        id = request.matchdict.get('id', None)
+        if id is None:
+            raise HTTPBadRequest()
+        else:
+            position = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+            if position:
+                DBSession.delete(position)
+
+        return HTTPFound(location=came_from)
+
 
     @view_config(route_name='home')
     def my_view(self):

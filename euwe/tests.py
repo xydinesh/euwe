@@ -167,12 +167,6 @@ class EuweUnitTestViews(unittest.TestCase):
         res = inst.list_view()
         self.assertIn('List', res['title'])
 
-    def test_positions_view(self):
-        from .views import EuweViews
-        request = testing.DummyRequest()
-        inst = EuweViews(request)
-        res = inst.position_view()
-        self.assertIn('Position', res['title'])
 
 class EuweFunctionalAuthTests(unittest.TestCase):
     def setUp(self):
@@ -259,11 +253,16 @@ class EuweFunctionalTests(unittest.TestCase):
 
     def test_list_url(self):
         res = self.testapp.get('/list')
-        self.assertIn(b'table', res.body)
+        self.assertIn(b'width: 200px', res.body)
 
     def test_show_position(self):
-        res = self.testapp.get('/positions', params={'id': 38})
+        res = self.testapp.get('/positions', params={'id': 14})
         self.assertIn(b'board', res.body)
+
+    def test_delete_position(self):
+        res = self.testapp.delete(url='/delete/16')
+        self.assertIn(b'redirect', res.body)
+        self.assertEqual(res.status_int, 302)
 
 
 

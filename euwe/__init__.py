@@ -37,5 +37,6 @@ def main(global_config, **settings):
     config.add_route('save', '/save')
     config.add_route('list', '/list')
     config.add_route('positions', '/positions')
+    config.add_route('delete', '/delete/{id}')
     config.scan()
     return config.make_wsgi_app()
