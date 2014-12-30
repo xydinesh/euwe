@@ -44,6 +44,8 @@ $('#id_btn_delete').click(function(){
         });
 
       });
+
+      location.reload(true);
     });
 
 </%def>

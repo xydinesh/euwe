@@ -96,7 +96,7 @@ class EuweViews(object):
         DBSession.add(position)
         position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
 
-        url = request.route_url('home')
+        url = request.route_url('list')
         return HTTPFound(location=url)
 
     @view_config(route_name='positions', renderer='templates/list.mako')
