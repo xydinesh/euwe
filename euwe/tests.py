@@ -171,7 +171,7 @@ class EuweUnitTestViews(unittest.TestCase):
 class EuweFunctionalAuthTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
-        app = get_app('development.ini')
+        app = get_app('testing.ini')
         from webtest import TestApp
         self.testapp = TestApp(app)
         self.config = testing.setUp()
@@ -212,7 +212,7 @@ class EuweFunctionalAuthTests(unittest.TestCase):
 class EuweFunctionalTests(unittest.TestCase):
     def setUp(self):
         from pyramid.paster import get_app
-        app = get_app('development.ini')
+        app = get_app('testing.ini')
         from webtest import TestApp
         self.testapp = TestApp(app)
         self.config = testing.setUp()
@@ -263,3 +263,7 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.delete(url='/delete/16')
         self.assertIn(b'redirect', res.body)
         self.assertEqual(res.status_int, 302)
+
+    def test_play_position(self):
+        res = self.testapp.get('/play?id=14')
+        self.assertIn(b'board', res.body)
