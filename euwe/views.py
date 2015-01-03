@@ -81,15 +81,12 @@ class EuweViews(object):
                 url=request.application_url + '/edit',
                 message='', user=userid)
 
-    @view_config(route_name='save', renderer='json')
+    @view_config(route_name='save', renderer='json', request_method=['POST'])
     def save_view(self):
         request = self.request
         userid = authenticated_userid(request)
         if userid is None:
             raise Forbidden()
-
-        if request.method != 'POST':
-            return HTTPMethodNotAllowed()
 
         fen = request.json_body['fen']
         position = PositionModel(category='position', userid=userid, fen=fen)
@@ -115,15 +112,12 @@ class EuweViews(object):
         return dict(project='euwe', title='Euwe List Positions',
         message='', userid=userid, positions=positions)
 
-    @view_config(route_name='delete')
+    @view_config(route_name='delete', request_method=['DELETE'])
     def delete_view(self):
         request = self.request
         userid = authenticated_userid(request)
         if userid is None:
             raise Forbidden()
-
-        if request.method != 'DELETE':
-            raise HTTPMethodNotAllowed()
 
         came_from = request.params.get('came_from', '/list')
         id = request.matchdict.get('id', None)

@@ -251,6 +251,12 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
         self.assertIn(b'redirect', res.body)
 
+    def test_save_url_fail(self):
+        import json
+        res = self.testapp.get('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'), status=404)
+        self.assertIn(b'Not Found', res.body)
+        self.assertEqual(res.status_int, 404)
+
     def test_list_url(self):
         res = self.testapp.get('/list')
         self.assertIn(b'width: 200px', res.body)
@@ -263,6 +269,11 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.delete(url='/delete/16')
         self.assertIn(b'redirect', res.body)
         self.assertEqual(res.status_int, 302)
+
+    def test_delete_position_fail(self):
+        res = self.testapp.get(url='/delete/16', status=404)
+        self.assertIn(b'Not Found', res.body)
+        self.assertEqual(res.status_int, 404)
 
     def test_play_position(self):
         res = self.testapp.get('/play?id=14')
