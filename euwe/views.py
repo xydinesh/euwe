@@ -130,6 +130,10 @@ class EuweViews(object):
 
         return HTTPFound(location=came_from)
 
+    @view_config(route_name='play')
+    def play_view(self):
+        return HTTPFound('/')
+
 
     @view_config(route_name='home')
     def my_view(self):
