@@ -112,6 +112,7 @@ class EuweViews(object):
         return dict(project='euwe', title='Euwe List Positions',
         message='', userid=userid, positions=positions)
 
+
     @view_config(route_name='delete', request_method=['DELETE'])
     def delete_view(self):
         request = self.request
@@ -132,7 +133,20 @@ class EuweViews(object):
 
     @view_config(route_name='play')
     def play_view(self):
-        return HTTPFound('/')
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+
+        id = request.params.get('id', None)
+        if id is not None:
+            position = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+        else:
+            raise HTTPBadRequest()
+
+        print (position)
+        return dict(project='euwe', title='Euwe Play Position',
+            message='', user=userid, position=position)
 
 
     @view_config(route_name='home')
