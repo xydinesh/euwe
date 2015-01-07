@@ -4,14 +4,17 @@ from pyramid.view import (view_config,
 view_defaults)
 from pyramid.security import (remember, forget, authenticated_userid)
 from pyramid.httpexceptions import (
-exception_response,
-HTTPMethodNotAllowed,
-HTTPBadRequest,
-HTTPFound)
+        exception_response,
+        HTTPMethodNotAllowed,
+        HTTPBadRequest,
+        HTTPFound)
 from .security import USERS
 from .models import (DBSession, MyModel, PositionModel)
 from sqlalchemy.exc import DBAPIError
 import transaction
+
+import logging
+log = logging.getLogger(__name__)
 
 
 @view_defaults(renderer='templates/welcome.mako')
@@ -122,10 +125,12 @@ class EuweViews(object):
 
         came_from = request.params.get('came_from', '/list')
         id = request.matchdict.get('id', None)
+        log.debug('id: ', id)
         if id is None:
             raise HTTPBadRequest()
         else:
             position = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+            log.debug('position ' + position)
             if position:
                 DBSession.delete(position)
 

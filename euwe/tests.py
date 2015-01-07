@@ -210,6 +210,7 @@ class EuweFunctionalAuthTests(unittest.TestCase):
         self.assertIn(b'Forbidden', res.body)
 
 class EuweFunctionalTests(unittest.TestCase):
+    
     def setUp(self):
         from pyramid.paster import get_app
         app = get_app('testing.ini')

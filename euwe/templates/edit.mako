@@ -12,7 +12,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form method='POST'>
+<form id='id_form_edit' method='POST'>
   <button class="btn btn-primary" id="id_btn_save" name="form.saved">Save</button>
 </form>
 <button class='btn btn-primary' id='id_btn_start'>Start Position</button>
@@ -52,6 +52,10 @@ var init = function() {
       dataType: 'json',
       success: function(data) {alert(data);}
       });
+    });
+
+    $('#id_form_edit').submit(function(e){
+      e.preventDefault();
     });
 
   //--- end example JS ---

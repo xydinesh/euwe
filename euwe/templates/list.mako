@@ -12,6 +12,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
+<form id='id_form_list' method='POST'>
 <div class="row" id="id_cb_div">
 <button class="btn btn-primary" id="id_btn_delete">Delete</button><br/>
   %for position in positions:
@@ -22,6 +23,7 @@ ${message}
   %endfor
   <div style="clear:both"></div>
 </div>
+</form>
 </%def>
 
 <%def name="javascript()">
@@ -31,6 +33,11 @@ var board${position.id} = new ChessBoard("board${position.id}", {
   showNotation: false
   })
 %endfor
+
+var init = function() {
+$('#id_form_list').submit(function(e){
+  e.preventDefault();
+  });
 
 $('#id_btn_delete').click(function(){
     $('#id_cb_div :checked').each(function() {
@@ -47,5 +54,6 @@ $('#id_btn_delete').click(function(){
 
       location.reload(true);
     });
-
+  } // end of init
+$(document).ready(init);
 </%def>
