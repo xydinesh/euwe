@@ -210,7 +210,7 @@ class EuweFunctionalAuthTests(unittest.TestCase):
         self.assertIn(b'Forbidden', res.body)
 
 class EuweFunctionalTests(unittest.TestCase):
-    
+
     def setUp(self):
         from pyramid.paster import get_app
         app = get_app('testing.ini')
@@ -267,7 +267,8 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'board', res.body)
 
     def test_delete_position(self):
-        res = self.testapp.delete(url='/delete/16')
+        res = self.testapp.delete(url='/delete/16', status=302)
+        print (res)
         self.assertIn(b'redirect', res.body)
         self.assertEqual(res.status_int, 302)
 

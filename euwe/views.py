@@ -125,15 +125,15 @@ class EuweViews(object):
 
         came_from = request.params.get('came_from', '/list')
         id = request.matchdict.get('id', None)
-        log.debug('id: ', id)
+        log.debug('id: {0}'.format(id))
         if id is None:
             raise HTTPBadRequest()
         else:
             position = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
-            log.debug('position ' + position)
+            log.debug('position {0}'.format(position))
             if position:
                 DBSession.delete(position)
-
+        url = '{0}?{1}'.format(request.route_url('list'), id)
         return HTTPFound(location=came_from)
 
     @view_config(route_name='play')

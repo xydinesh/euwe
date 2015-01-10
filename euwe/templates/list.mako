@@ -12,7 +12,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form id='id_form_list' method='POST'>
+<form id='id_form_list' method='POST' action='/delete'>
 <div class="row" id="id_cb_div">
 <button class="btn btn-primary" id="id_btn_delete">Delete</button><br/>
   %for position in positions:
@@ -35,6 +35,7 @@ var board${position.id} = new ChessBoard("board${position.id}", {
 %endfor
 
 var init = function() {
+
 $('#id_form_list').submit(function(e){
   e.preventDefault();
   });
@@ -43,17 +44,20 @@ $('#id_btn_delete').click(function(){
     $('#id_cb_div :checked').each(function() {
       var v = $(this).val();
       $.ajax({
+          async: true,
           url: '/delete/' + v,
-          type: 'DELETE',
+          type: 'delete',
           success: function(result) {
-            // console.log(result);
+            console.log(v);
+            // console.log('result: ' + result);
           }
         });
 
       });
 
-      location.reload(true);
+      //window.location.reload(true);
     });
+
   } // end of init
 $(document).ready(init);
 </%def>
