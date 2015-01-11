@@ -12,13 +12,22 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form id='id_form_edit' method='POST'>
-  <button class="btn btn-primary" id="id_btn_save" name="form.saved">Save</button>
-</form>
-<button class='btn btn-primary' id='id_btn_start'>Start Position</button>
-<button class="btn btn-primary" id="id_btn_clear">Clear</button>
-<button class="btn btn-primary" id='id_btn_flip'>Flip Board</button>
-<textarea id="id_text_area" value=""></textarea>
+<form role="form" id='id_form_edit'>
+  <div class='form-group'>
+    <button class="btn btn-primary" id="id_btn_save" name="form.saved" type="submit">Save</button>
+  </div>
+  <div class='form-group'>
+    <button class='btn btn-primary' id='id_btn_start'>Start Position</button>
+  </div>
+  <div class='form-group'>
+    <button class="btn btn-primary" id="id_btn_clear">Clear</button>
+  </div>
+  <div class='form-group'>
+    <button class="btn btn-primary" id='id_btn_flip'>Flip Board</button>
+  </div>
+  <div class='form-group'>
+    <textarea id="id_text_area" value=""></textarea>
+  </div>
 </%def>
 
 <%def name="javascript()">

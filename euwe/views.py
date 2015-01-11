@@ -106,8 +106,17 @@ class EuweViews(object):
         userid = authenticated_userid(request)
         if userid is None:
             raise Forbidden()
-
         id = request.params.get('id', None)
+        if 'position.delete' in request.params:
+            url = '{0}'.format(request.route_url('home'))
+            position = DBSession.query(PositionModel).filter_by(userid=userid, id=id).first()
+            if position:
+                DBSession.delete(position)
+                request.session.flash('Possition was deleted successfully')
+
+            url = request.route_url('home')
+            return HTTPFound(location=url)
+
         if id is None:
             positions = DBSession.query(PositionModel).filter_by(userid=userid).all()
         else:
@@ -123,7 +132,6 @@ class EuweViews(object):
         if userid is None:
             raise Forbidden()
 
-        came_from = request.params.get('came_from', '/list')
         id = request.matchdict.get('id', None)
         log.debug('id: {0}'.format(id))
         if id is None:
@@ -133,8 +141,9 @@ class EuweViews(object):
             log.debug('position {0}'.format(position))
             if position:
                 DBSession.delete(position)
-        url = '{0}?{1}'.format(request.route_url('list'), id)
-        return HTTPFound(location=came_from)
+        url = '{0}'.format(request.route_url('home'))
+        print ('url: {0}'.format(url))
+        return HTTPFound(location=url)
 
     @view_config(route_name='play')
     def play_view(self):
