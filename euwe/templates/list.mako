@@ -17,7 +17,7 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form id='id_form_list' method='POST' action='/delete' role='form'>
+<form id='id_form_list' method='delete' action='/delete' role='form'>
 <div class="row" id="id_cb_div">
 <div class='form-group'>
   <button class="btn btn-primary" id="id_btn_delete" type="submit" name='position.delete'>Delete</button><br/>
@@ -56,10 +56,9 @@ $('#id_btn_delete').click(function(){
           async: true,
           url: '/list?position.delete&id=' + v,
           type: 'delete',
-          success: function(result) {
-            console.log(v);
-            console.log('result: ' + result);
-            $(document).load('/');
+          success: function(result, xhr) {
+            // console.log(v);
+            // console.log('result: ' + result);
           }
         });
 
