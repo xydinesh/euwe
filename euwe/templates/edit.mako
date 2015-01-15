@@ -59,7 +59,9 @@ var init = function() {
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ 'fen': board.fen() }),
       dataType: 'json',
-      success: function(data) {alert(data);}
+      success: function(data) {
+        window.location.href = "/list";
+      }
       });
     });
 
