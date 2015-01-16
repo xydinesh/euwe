@@ -49,23 +49,28 @@ $('#id_form_list').submit(function(e){
   e.preventDefault();
   });
 
+
+
 $('#id_btn_delete').click(function(){
+    var deferreds = [];
     $('#id_cb_div :checked').each(function() {
       var v = $(this).val();
-      $.ajax({
+      deferreds.push($.ajax({
           async: true,
           url: '/list?position.delete&id=' + v,
           type: 'delete',
           success: function(result, xhr) {
-            window.location.href = "/list";
+            //window.location.href = "/list";
             // console.log(v);
             // console.log('result: ' + result);
           }
-        });
+        }));
 
       });
 
-      //window.location.reload(true);
+      $.when.apply($, deferreds).done(function() {
+        window.location.href = "/list";
+      });
     });
 
   } // end of init
