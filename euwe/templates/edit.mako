@@ -56,10 +56,10 @@ var init = function() {
     $.ajax({
       type: "POST",
       url: '/save',
-      contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ 'fen': board.fen() }),
       dataType: 'json',
       success: function(data) {
+        console.log('save function')
         window.location.href = "/list";
       }
       });

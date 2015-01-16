@@ -97,7 +97,7 @@ class EuweViews(object):
         position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
 
         url = request.route_url('list')
-        return HTTPFound(location=url)
+        return dict(result='success')
 
     @view_config(route_name='positions', renderer='templates/list.mako')
     @view_config(route_name='list', renderer='templates/list.mako')
@@ -143,7 +143,7 @@ class EuweViews(object):
                 DBSession.delete(position)
         url = '{0}'.format(request.route_url('home'))
         print ('url: {0}'.format(url))
-        return HTTPFound(location=url)
+        return dict(result='success')
 
     @view_config(route_name='play')
     def play_view(self):
