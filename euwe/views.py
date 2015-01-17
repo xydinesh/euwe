@@ -99,6 +99,7 @@ class EuweViews(object):
         url = request.route_url('list')
         return dict(result='success')
 
+    @view_config(route_name='home', renderer='templates/list.mako')
     @view_config(route_name='positions', renderer='templates/list.mako')
     @view_config(route_name='list', renderer='templates/list.mako')
     def list_view(self):
@@ -163,7 +164,7 @@ class EuweViews(object):
             message='', user=userid, position=position)
 
 
-    @view_config(route_name='home')
+    @view_config(route_name='test')
     def my_view(self):
         try:
             request = self.request

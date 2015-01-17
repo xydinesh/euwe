@@ -39,5 +39,6 @@ def main(global_config, **settings):
     config.add_route('positions', '/positions')
     config.add_route('delete', '/delete/{id}')
     config.add_route('play', '/play')
+    config.add_route('test', '/test')
     config.scan()
     return config.make_wsgi_app()
