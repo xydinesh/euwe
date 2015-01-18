@@ -27,7 +27,7 @@ ${message}
       <div class = "form-group">
         <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}<br>
       </div>
-      <div id="board${position.id}" style="width: 200px; float: left; margin-right: 10"></div>
+      <div class="chess-board" id="${position.id}" style="width: 200px; float: left; margin-right: 10"></div>
     </div>
   %endfor
   <div style="clear:both"></div>
@@ -37,7 +37,7 @@ ${message}
 
 <%def name="javascript()">
 %for position in positions:
-var board${position.id} = new ChessBoard("board${position.id}", {
+var board${position.id} = new ChessBoard("${position.id}", {
   position: "${position.fen}",
   showNotation: false
   })
@@ -49,7 +49,11 @@ $('#id_form_list').submit(function(e){
   e.preventDefault();
   });
 
-
+$('.chess-board').dblclick(function() {
+    var status = $(this).attr('id');
+    console.log(status);
+    window.location.href = "/play?id=" + status;
+  });
 
 $('#id_btn_delete').click(function(){
     var deferreds = [];
