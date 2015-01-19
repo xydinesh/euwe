@@ -161,7 +161,7 @@ class EuweViews(object):
 
         print (position)
         return dict(project='euwe', title='Euwe Play Position',
-            message='', user=userid, position=position)
+            message='', userid=userid, position=position)
 
 
     @view_config(route_name='test')
