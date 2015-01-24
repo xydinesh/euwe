@@ -72,7 +72,7 @@ class EuweViews(object):
             pos = DBSession.query(PositionModel).filter_by(id=id).first()
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
-        return dict(project='euwe', position=pos, user=userid)
+        return dict(project='euwe', position=pos, userid=userid)
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
@@ -96,8 +96,7 @@ class EuweViews(object):
         DBSession.add(position)
         position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
 
-        url = request.route_url('list')
-        return dict(result='success')
+        return dict(result='success', id=position.id)
 
     @view_config(route_name='home', renderer='templates/list.mako')
     @view_config(route_name='positions', renderer='templates/list.mako')
@@ -126,7 +125,7 @@ class EuweViews(object):
         message='', userid=userid, positions=positions)
 
 
-    @view_config(route_name='delete', request_method=['DELETE'])
+    @view_config(route_name='delete', renderer='json', request_method=['DELETE'])
     def delete_view(self):
         request = self.request
         userid = authenticated_userid(request)
@@ -142,9 +141,7 @@ class EuweViews(object):
             log.debug('position {0}'.format(position))
             if position:
                 DBSession.delete(position)
-        url = '{0}'.format(request.route_url('home'))
-        print ('url: {0}'.format(url))
-        return dict(result='success')
+        return dict(result='success', id=id)
 
     @view_config(route_name='play')
     def play_view(self):

@@ -9,6 +9,8 @@ from pyramid import testing
 from .models import DBSession
 from unittest.mock import patch
 
+import json
+
 def _initDB():
     from sqlalchemy import create_engine
     engine = create_engine('sqlite://')
@@ -231,8 +233,10 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertTrue(b'Euwe' in res.body)
 
     def test_fen_url(self):
-        res = self.testapp.get('/fen', params={'id': 1}, status=200)
-        self.assertIn(b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R', res.body)
+        result = self.test_save_url()
+        id = result['id']
+        res = self.testapp.get('/fen', params={'id': id}, status=200)
+        self.assertIn(b'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R', res.body)
 
     def test_fen_url_invalid_id(self):
         res = self.testapp.get('/fen', params={'id': 150}, status=200)
@@ -250,7 +254,10 @@ class EuweFunctionalTests(unittest.TestCase):
     def test_save_url(self):
         import json
         res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
-        self.assertIn(b'redirect', res.body)
+        result = json.loads(res.body.decode('utf-8'))
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue('id' in result)
+        return result
 
     def test_save_url_fail(self):
         import json
@@ -267,10 +274,12 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'board', res.body)
 
     def test_delete_position(self):
-        res = self.testapp.delete(url='/delete/16', status=302)
-        print (res)
-        self.assertIn(b'redirect', res.body)
-        self.assertEqual(res.status_int, 302)
+        result = self.test_save_url()
+        id = result['id']
+        res = self.testapp.delete(url='/delete/{0}'.format(id))
+        res = json.loads(res.body.decode('utf-8'))
+        self.assertEqual(int(res['id']), id)
+        self.assertEqual(res['result'], 'success')
 
     def test_delete_position_fail(self):
         res = self.testapp.get(url='/delete/16', status=404)
