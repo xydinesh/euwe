@@ -24,10 +24,12 @@ ${message}
 </div>
   %for position in positions:
     <div class="col-sm-2">
-      <div class = "form-group">
-        <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}<br>
+      <div class="thumbnail">
+        <div class = "form-group">
+          <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}<br>
+        </div>
+        <div class="chess-board" id="${position.id}"></div>
       </div>
-      <div class="chess-board" id="${position.id}" style="width: 200px; float: left; margin-right: 10"></div>
     </div>
   %endfor
   <div style="clear:both"></div>
