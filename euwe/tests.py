@@ -267,7 +267,7 @@ class EuweFunctionalTests(unittest.TestCase):
 
     def test_list_url(self):
         res = self.testapp.get('/list')
-        self.assertIn(b'width: 200px', res.body)
+        self.assertIn(b'thumbnail', res.body)
 
     def test_show_position(self):
         res = self.testapp.get('/positions', params={'id': 14})
