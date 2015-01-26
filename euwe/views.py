@@ -91,10 +91,18 @@ class EuweViews(object):
         if userid is None:
             raise Forbidden()
 
-        fen = request.json_body['fen']
-        position = PositionModel(category='position', userid=userid, fen=fen)
-        DBSession.add(position)
-        position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
+        fen = request.json_body.get('fen', None)
+        id = request.json_body.get('id', None)
+        solution = request.json_body.get('solution', None)
+        if id is None:
+            position = PositionModel(category='position', userid=userid, fen=fen)
+            DBSession.add(position)
+            position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
+        else:
+            position = DBSession.query(PositionModel).filter_by(id=id, userid=userid).first()
+            if position is None:
+                raise Exception('Position for id {0} not found'.fomat(id))
+            position.solution = solution
 
         return dict(result='success', id=position.id)
 

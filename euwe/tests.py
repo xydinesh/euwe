@@ -281,3 +281,16 @@ class EuweFunctionalTests(unittest.TestCase):
     def test_play_position(self):
         res = self.testapp.get('/play?id=14')
         self.assertIn(b'board', res.body)
+
+    def test_solution_url(self):
+        import json
+        result = self.test_save_url()
+        id = result['id']
+        res = self.testapp.post_json('/save', dict(id=id, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
+        result = json.loads(res.body.decode('utf-8'))
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue('id' in result)
+
+        # delete request from the database
+        res = self.testapp.delete(url='/delete/{0}'.format(id))
+        return result
