@@ -95,6 +95,8 @@ class EuweViews(object):
         id = request.json_body.get('id', None)
         solution = request.json_body.get('solution', None)
         if id is None:
+            if fen is None:
+                return dict(result='fail', description='Did not found valid FEN in request body')    
             position = PositionModel(category='position', userid=userid, fen=fen)
             DBSession.add(position)
             position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
