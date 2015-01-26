@@ -294,3 +294,14 @@ class EuweFunctionalTests(unittest.TestCase):
         # delete request from the database
         res = self.testapp.delete(url='/delete/{0}'.format(id))
         return result
+
+    def test_solution_url_fail(self):
+        import json
+        res = self.testapp.post_json('/save', dict(id=10002, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
+        result = json.loads(res.body.decode('utf-8'))
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue('id' in result)
+
+        # delete request from the database
+        res = self.testapp.delete(url='/delete/{0}'.format(id))
+        return result
