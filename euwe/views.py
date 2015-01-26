@@ -101,7 +101,9 @@ class EuweViews(object):
         else:
             position = DBSession.query(PositionModel).filter_by(id=id, userid=userid).first()
             if position is None:
-                raise Exception('Position for id {0} not found'.fomat(id))
+                return dict(result='fail', description='Position not found for id {0}'.format(id))
+            if solution is None:
+                return dict(result='fail', description='No solution to save for id {0}'.format(id))
             position.solution = solution
 
         return dict(result='success', id=position.id)
