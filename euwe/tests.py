@@ -147,14 +147,6 @@ class EuweUnitTestViews(unittest.TestCase):
         info = inst.edit_view()
         self.assertTrue('Edit' in info['title'])
 
-    def test_save_view_fail(self):
-        from .views import EuweViews
-        from pyramid.httpexceptions import HTTPMethodNotAllowed
-        request = testing.DummyRequest(params={'fen': 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R'})
-        inst = EuweViews(request)
-        res = inst.save_view()
-        self.assertEqual(res.__class__, HTTPMethodNotAllowed)
-
     def test_perosna_login(self):
         from .views import EuweViews
         request = testing.DummyRequest()
