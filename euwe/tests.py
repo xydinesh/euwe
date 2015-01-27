@@ -216,8 +216,14 @@ class EuweFunctionalTests(unittest.TestCase):
         form['username'] = 'max'
         form['password'] = 'user_max'
         res = form.submit('form.submitted')
+        self.id = None
 
     def tearDown(self):
+        if self.id == None:
+            res = self.testapp.delete(url='/delete/{0}'.format(self.id))
+            import logging
+            logging.debug('delete {0}'.format(self.id))
+        self.id = None
         testing.tearDown()
 
     def test_home_url(self):
@@ -249,6 +255,7 @@ class EuweFunctionalTests(unittest.TestCase):
         result = json.loads(res.body.decode('utf-8'))
         self.assertEqual(result['result'], 'success')
         self.assertTrue('id' in result)
+        self.id = result['id']
         return result
 
     def test_save_url_fail(self):
@@ -279,7 +286,9 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertEqual(res.status_int, 404)
 
     def test_play_position(self):
-        res = self.testapp.get('/play?id=14')
+        result = self.test_save_url()
+        self.id = result.get('id', 'None')
+        res = self.testapp.get('/play?id={0}'.format(self.id))
         self.assertIn(b'board', res.body)
 
     def test_solution_url(self):
