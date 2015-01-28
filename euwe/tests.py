@@ -250,7 +250,6 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
 
     def test_save_url(self):
-        import json
         res = self.testapp.post_json('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
         result = json.loads(res.body.decode('utf-8'))
         self.assertEqual(result['result'], 'success')
@@ -259,7 +258,6 @@ class EuweFunctionalTests(unittest.TestCase):
         return result
 
     def test_save_url_fail(self):
-        import json
         res = self.testapp.get('/save', dict(fen='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'), status=404)
         self.assertIn(b'Not Found', res.body)
         self.assertEqual(res.status_int, 404)
@@ -292,7 +290,6 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b'board', res.body)
 
     def test_solution_url(self):
-        import json
         result = self.test_save_url()
         id = result['id']
         res = self.testapp.post_json('/save', dict(id=id, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
@@ -305,14 +302,12 @@ class EuweFunctionalTests(unittest.TestCase):
         return result
 
     def test_solution_url_fail(self):
-        import json
         res = self.testapp.post_json('/save', dict(id=10002, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
         result = json.loads(res.body.decode('utf-8'))
         self.assertEqual(result['result'], 'fail')
         self.assertEqual(result['description'], 'Position not found for id 10002')
 
     def test_solution_url_fail_2(self):
-        import json
         result = self.test_save_url()
         id = result['id']
 
@@ -320,3 +315,11 @@ class EuweFunctionalTests(unittest.TestCase):
         result = json.loads(res.body.decode('utf-8'))
         self.assertEqual(result['result'], 'fail')
         self.assertEqual(result['description'], 'No solution to save for id {0}'.format(id))
+
+    def test_edit_url_with_id(self):
+        result = self.test_save_url()
+        id = result['id']
+
+        res = self.testapp.get('/edit?id={0}'.format(id))
+        self.assertIn(b'id_btn_save_solution', res.body)
+        self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
