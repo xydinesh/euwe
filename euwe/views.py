@@ -88,7 +88,7 @@ class EuweViews(object):
             return HTTPInternalServerError('{0}'.format(e))
         else:
             return dict(project='euwe', title='Euwe Save Solution',
-                    message='', position=pos, user=userid)
+                    message='', position=pos, user=userid, id=pid)
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
