@@ -26,7 +26,7 @@ ${message}
     <div class='form-group'>
       <button class="btn btn-primary" id='id_btn_flip'>Flip Board</button>
     </div>
-    <div style='clear:both;'></div>
+    <div style='clear:both;'></div>|
     <div class='form-group'>
       <textarea id="id_text_area" value=""></textarea>
     </div>

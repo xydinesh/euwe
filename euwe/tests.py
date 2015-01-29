@@ -147,6 +147,13 @@ class EuweUnitTestViews(unittest.TestCase):
         info = inst.edit_view()
         self.assertTrue('Edit' in info['title'])
 
+    def test_edit_solution_view(self):
+        from .views import EuweViews
+        request = testing.DummyRequest()
+        inst = EuweViews(request)
+        info = inst.edit_solution_view()
+        self.assertTrue('Save Solution' in info['title'])
+
     def test_perosna_login(self):
         from .views import EuweViews
         request = testing.DummyRequest()

@@ -7,6 +7,7 @@ from pyramid.httpexceptions import (
         exception_response,
         HTTPMethodNotAllowed,
         HTTPBadRequest,
+        HTTPInternalServerError,
         HTTPFound)
 from .security import USERS
 from .models import (DBSession, MyModel, PositionModel)
@@ -74,6 +75,21 @@ class EuweViews(object):
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         return dict(project='euwe', position=pos, userid=userid)
 
+    @view_config(route_name='edit_solutioin', renderer='templates/solution.mako')
+    def edit_solution_view(self):
+        try:
+            request = self.request
+            userid = authenticated_userid(request)
+            if userid is None:
+                raise Forbidden()
+            pid = request.params.get('id', None)
+            pos = DBSession.query(PositionModel).filter_by(id=pid, userid=userid).first()
+        except DBAPIError as e:
+            return HTTPInternalServerError('{0}'.format(e))
+        else:
+            return dict(project='euwe', title='Euwe Save Solution',
+                    user=userid)
+
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
         request = self.request
@@ -96,7 +112,7 @@ class EuweViews(object):
         solution = request.json_body.get('solution', None)
         if id is None:
             if fen is None:
-                return dict(result='fail', description='Did not found valid FEN in request body')    
+                return dict(result='fail', description='Did not found valid FEN in request body')
             position = PositionModel(category='position', userid=userid, fen=fen)
             DBSession.add(position)
             position = DBSession.query(PositionModel).filter_by(fen=fen, userid=userid).first()
