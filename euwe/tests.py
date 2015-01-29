@@ -323,10 +323,10 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertEqual(result['result'], 'fail')
         self.assertEqual(result['description'], 'No solution to save for id {0}'.format(id))
 
-    def test_edit_url_with_id(self):
+    def test_edit_solution_id(self):
         result = self.test_save_url()
         id = result['id']
 
-        res = self.testapp.get('/edit?id={0}'.format(id))
+        res = self.testapp.get('/solution?id={0}'.format(id))
         self.assertIn(b'id_btn_save_solution', res.body)
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)

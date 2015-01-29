@@ -75,7 +75,7 @@ class EuweViews(object):
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         return dict(project='euwe', position=pos, userid=userid)
 
-    @view_config(route_name='edit_solutioin', renderer='templates/solution.mako')
+    @view_config(route_name='solution', renderer='templates/solution.mako')
     def edit_solution_view(self):
         try:
             request = self.request
@@ -88,7 +88,7 @@ class EuweViews(object):
             return HTTPInternalServerError('{0}'.format(e))
         else:
             return dict(project='euwe', title='Euwe Save Solution',
-                    user=userid)
+                    message='', position=pos, user=userid)
 
     @view_config(route_name='edit', renderer='templates/edit.mako')
     def edit_view(self):
