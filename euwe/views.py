@@ -171,7 +171,7 @@ class EuweViews(object):
                 DBSession.delete(position)
         return dict(result='success', id=id)
 
-    @view_config(route_name='play')
+    @view_config(route_name='play', renderer='templates/play.mako')
     def play_view(self):
         request = self.request
         userid = authenticated_userid(request)
