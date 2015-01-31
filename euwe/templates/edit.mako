@@ -63,8 +63,7 @@ var init = function() {
       data: JSON.stringify({ 'fen': board.fen() }),
       dataType: 'json',
       success: function(data) {
-        console.log('save function')
-        window.location.href = "/list";
+        window.location.href = "/solution?id=" + data['id'];
       }
       });
     });
