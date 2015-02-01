@@ -12,7 +12,7 @@ Euwe, Chess tactics engine for absolute beginners
 <div id='div_form_container'>
   <form role="form" id='id_form_play'>
     <div class='form-group'>
-      <button class="btn btn-primary" id="id_btn_solution" name="form.played" type="submit">Check Solution</button>
+      <button class="btn btn-primary" id="id_btn_play" name="form.played" type="submit">Check Solution</button>
     </div>
   </form>
 </div>
@@ -34,8 +34,23 @@ var cfg = {
   %endif
 %endif
 var board = new ChessBoard('board', cfg);
-//--- end example JS ---
 
+$('#id_btn_play').click(function(){
+  $.ajax({
+    type: "POST",
+    url: '/',
+    data: JSON.stringify({ 'id': "${id}", 'solution': board.fen() }),
+    dataType: 'json',
+    success: function(data) {
+      console.log('save function')
+      window.location.href = "/list";
+    }
+    });
+  });
+
+  $('#id_form_play').submit(function(e){
+    e.preventDefault();
+  });
 }; // end init()
 $(document).ready(init);
  </%def>
