@@ -305,7 +305,7 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertTrue('id' in result)
 
         # delete request from the database
-        res = self.testapp.delete(url='/delete/{0}'.format(id))
+        #res = self.testapp.delete(url='/delete/{0}'.format(id))
         return result
 
     def test_solution_url_fail(self):
@@ -332,9 +332,8 @@ class EuweFunctionalTests(unittest.TestCase):
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
 
     def test_answer_id(self):
-        result = self.test_save_url()
+        result = self.test_solution_url()
         id = result['id']
 
         res = self.testapp.get('/answer', dict(id=id, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
-        print (res.json)
         self.assertEqual(res.json['result'], 'success')

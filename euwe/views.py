@@ -102,7 +102,24 @@ class EuweViews(object):
 
     @view_config(route_name='answer', renderer='json', request_method=['GET'])
     def answer_view(self):
-        return dict(result='success')
+        request = self.request
+        userid = authenticated_userid(request)
+        if userid is None:
+            raise Forbidden()
+
+        id = request.params.get('id', None)
+        solution = request.params.get('solution', None)
+
+        if solution is None:
+            return dict(result='fail', description='No solution received id {0}'.format(id))
+        try:
+            position = DBSession.query(PositionModel).filter_by(id=id, userid=userid).first()
+        except DBAPIError as e:
+            return dict(result='fail', description='Database error occoured {0}'.format(e))
+        else:
+            if position.solution == solution:
+                return dict(result='success')
+        return dict(result='fail', description='Invalid solution')
 
     @view_config(route_name='save', renderer='json', request_method=['POST'])
     def save_view(self):
