@@ -205,9 +205,8 @@ class EuweViews(object):
         else:
             raise HTTPBadRequest()
 
-        print (position)
         return dict(project='euwe', title='Euwe Play Position',
-            message='', userid=userid, position=position)
+            message='', userid=userid, position=position, id=id)
 
 
     @view_config(route_name='test')

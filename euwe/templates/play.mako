@@ -37,13 +37,14 @@ var board = new ChessBoard('board', cfg);
 
 $('#id_btn_play').click(function(){
   $.ajax({
-    type: "POST",
-    url: '/',
-    data: JSON.stringify({ 'id': "${id}", 'solution': board.fen() }),
+    type: "GET",
+    url: '/answer',
+    data: 'id=${id}&solution='+board.fen(),
     dataType: 'json',
     success: function(data) {
-      console.log('save function')
-      window.location.href = "/list";
+      if (data['result'] == 'success') {
+        alert('Success');
+      }
     }
     });
   });
