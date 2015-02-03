@@ -44,6 +44,8 @@ $('#id_btn_play').click(function(){
     success: function(data) {
       if (data['result'] == 'success') {
         alert('Success');
+      } else {
+        window.location.href = '/play?id=${id}';
       }
     }
     });
