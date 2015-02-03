@@ -330,3 +330,11 @@ class EuweFunctionalTests(unittest.TestCase):
         res = self.testapp.get('/solution?id={0}'.format(id))
         self.assertIn(b'id_btn_save_solution', res.body)
         self.assertIn(b"var board = new ChessBoard('board', cfg);", res.body)
+
+    def test_answer_id(self):
+        result = self.test_save_url()
+        id = result['id']
+
+        res = self.testapp.get('/answer', dict(id=id, solution='r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP2PP/RNBQK2R'))
+        print (res.json)
+        self.assertEqual(res.json['result'], 'success')

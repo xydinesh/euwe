@@ -100,6 +100,10 @@ class EuweViews(object):
                 url=request.application_url + '/edit',
                 message='', user=userid)
 
+    @view_config(route_name='answer', renderer='json', request_method=['GET'])
+    def answer_view(self):
+        return dict(result='success')
+
     @view_config(route_name='save', renderer='json', request_method=['POST'])
     def save_view(self):
         request = self.request
