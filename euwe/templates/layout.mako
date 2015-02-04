@@ -19,6 +19,7 @@
     <!-- Custom styles for this scaffold -->
     <link href="${request.static_url('euwe:static/css/theme.css')}" rel="stylesheet">
     <link rel="stylesheet" href="${request.static_url('euwe:static/css/chessboard-0.3.0.css')}" />
+    <link rel="stylesheet" href="${request.static_url('euwe:static/css/bootstrap.css')}" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
