@@ -98,7 +98,7 @@ class EuweViews(object):
             raise Forbidden()
         return dict(project='euwe', title='Euwe Edit Position',
                 url=request.application_url + '/edit',
-                message='', user=userid)
+                message='', userid=userid)
 
     @view_config(route_name='answer', renderer='json', request_method=['GET'])
     def answer_view(self):

@@ -44,11 +44,15 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/edit">Edit<span class="sr-only">(current)</span></a></li>
+            % if request.url == request.route_url('home'):
+            <li><a id='tab-delete' href="/delete" data-toggle="tab">Delete</a></li>
+            %endif
+
+            <li><a id='tab-edit' href="/edit" data-toggle="tab">Edit</a></li>
             % if userid:
-            <li class="active"><a href="/logout">Logout</a></li>
+            <li><a href="/logout">Logout</a></li>
             % else:
-            <li class="active"><a href="/login">Login<a></li>
+            <li><a href="/login">Login<a></li>
             % endif
           </ul>
         </div><!-- /.navbar-collapse -->

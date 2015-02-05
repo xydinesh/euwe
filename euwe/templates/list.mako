@@ -70,7 +70,7 @@ $('#id_btn_delete').click(function(){
       });
 
       $.when.apply($, deferreds).done(function() {
-        window.location.href = "/list";
+        window.location.href = "/";
       });
     });
 
