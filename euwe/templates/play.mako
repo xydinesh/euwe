@@ -9,23 +9,34 @@ Euwe, Chess tactics engine for absolute beginners
 </%def>
 
 <%def name="body_content_after_board()">
-<div id='div_form_container'>
-  <form role="form" id='id_form_play'>
-    <div class='form-group'>
-      <button class="btn btn-primary" id="id_btn_play" name="form.played" type="submit">Check Solution</button>
-    </div>
-  </form>
-</div>
 </%def>
 
 <%def name="javascript()">
 var init = function() {
 
+
+  var playFunction = function(source, target, piece, newPos, oldPos, orientation) {
+    $.ajax({
+      type: "GET",
+      url: '/answer',
+      data: 'id=${id}&solution='+ChessBoard.objToFen(newPos),
+      dataType: 'json',
+      success: function(data) {
+        if (data['result'] == 'success') {
+          alert('Success');
+        } else {
+          window.location.href = '/play?id=${id}';
+        }
+      }
+      });
+  };
+
 //--- start example JS ---
 var cfg = {
   draggable: true,
   dropOffBoard: 'snapback', // this is the default
-  position: 'start'
+  position: 'start',
+  onDrop: playFunction
 };
 
 %if position is not UNDEFINED:
@@ -34,6 +45,10 @@ var cfg = {
   %endif
 %endif
 var board = new ChessBoard('board', cfg);
+
+var playFunction = function() {
+
+};
 
 $('#id_btn_play').click(function(){
   $.ajax({
