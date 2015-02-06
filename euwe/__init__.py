@@ -21,6 +21,7 @@ def main(global_config, **settings):
                           root_factory='euwe.models.RootFactory')
     config.include('pyramid_mako')
     config.include('pyramid_persona')
+    config.add_mako_renderer('.html')
 
     # static properties
     config.add_static_view('static', 'static', cache_max_age=60)

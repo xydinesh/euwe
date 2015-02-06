@@ -18,14 +18,14 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@view_defaults(renderer='templates/welcome.mako')
+@view_defaults(renderer='templates/welcome.html')
 class EuweViews(object):
 
     def __init__(self, request):
         self.request = request
         self.logged_in = request.authenticated_userid
 
-    @view_config(route_name='login', renderer='templates/login.mako')
+    @view_config(route_name='login', renderer='templates/login.html')
     def login_view(self):
         """
         view for handling login
@@ -75,7 +75,7 @@ class EuweViews(object):
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         return dict(project='euwe', position=pos, userid=userid)
 
-    @view_config(route_name='solution', renderer='templates/solution.mako')
+    @view_config(route_name='solution', renderer='templates/solution.html')
     def edit_solution_view(self):
         try:
             request = self.request
@@ -90,7 +90,7 @@ class EuweViews(object):
             return dict(project='euwe', title='Euwe Save Solution',
                     message='', position=pos, user=userid, id=pid)
 
-    @view_config(route_name='edit', renderer='templates/edit.mako')
+    @view_config(route_name='edit', renderer='templates/edit.html')
     def edit_view(self):
         request = self.request
         userid = authenticated_userid(request)
@@ -147,9 +147,9 @@ class EuweViews(object):
 
         return dict(result='success', id=position.id)
 
-    @view_config(route_name='home', renderer='templates/list.mako')
-    @view_config(route_name='positions', renderer='templates/list.mako')
-    @view_config(route_name='list', renderer='templates/list.mako')
+    @view_config(route_name='home', renderer='templates/list.html')
+    @view_config(route_name='positions', renderer='templates/list.html')
+    @view_config(route_name='list', renderer='templates/list.html')
     def list_view(self):
         request = self.request
         userid = authenticated_userid(request)
@@ -192,7 +192,7 @@ class EuweViews(object):
                 DBSession.delete(position)
         return dict(result='success', id=id)
 
-    @view_config(route_name='play', renderer='templates/play.mako')
+    @view_config(route_name='play', renderer='templates/play.html')
     def play_view(self):
         request = self.request
         userid = authenticated_userid(request)
