@@ -19,9 +19,6 @@ ${message}
 <%def name="body_content_after_board()">
 <form id='id_form_list' name='id_form_list' role='form'>
 <div class="row" id="id_cb_div">
-<div class='form-group'>
-  <button class="btn btn-primary" id="id_btn_delete" type="submit" name='position.delete'>Delete</button><br/>
-</div>
   %for position in positions:
     <div class="col-sm-2">
       <div class="thumbnail">
@@ -57,7 +54,7 @@ $('.chess-board').dblclick(function() {
     window.location.href = "/play?id=" + status;
   });
 
-$('#id_btn_delete').click(function(){
+$('#tab-delete').click(function(){
     var deferreds = [];
     $('#id_cb_div :checked').each(function() {
       var v = $(this).val();
