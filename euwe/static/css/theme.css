@@ -1,3 +1,11 @@
+#board {
+  margin: 10px 100px 10px 200px;
+}
+
+#id_form_edit {
+  margin: 10px 100px 10px 200px;
+}
+
 #id_form_edit > div {
   float: left;
   margin: 40px 10px 20px 10px;
