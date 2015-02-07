@@ -8,3 +8,9 @@
   float: left;
   margin: 40px 10px 20px 10px;
 }
+
+.col-chess {
+  width: 16%;
+  float: left;
+  margin: 20px;
+}

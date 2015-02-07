@@ -20,12 +20,12 @@ ${message}
 <form id='id_form_list' name='id_form_list' role='form'>
 <div class="row" id="id_cb_div">
   %for position in positions:
-    <div class="col-sm-2">
-      <div class="thumbnail">
-        <div class = "form-group">
-          <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}<br>
-        </div>
-        <div class="chess-board" id="${position.id}"></div>
+    <div class="col-chess">
+      <div class="card">
+        <h3 class="card-heading simple">
+          <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}
+        </h3>
+        <div class="card-body chess-board" id="${position.id}"></div>
       </div>
     </div>
   %endfor
