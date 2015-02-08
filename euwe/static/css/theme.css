@@ -22,3 +22,16 @@
   float: left;
   margin: 20px;
 }
+
+.card-heading {
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow: hidden;
+  color: white;
+  background: #DD4814;
+  border: 1px;
+}
+
+.del-checkbox {
+  margin: 20px;
+}

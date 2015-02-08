@@ -22,9 +22,11 @@ ${message}
   %for position in positions:
     <div class="col-chess">
       <div class="card">
-        <h3 class="card-heading simple">
-          <input type="checkbox" name="${position.id}" value="${position.id}">${position.id}
-        </h3>
+        <div class="card-header">
+          <h3 class="card-heading simple">
+            <input class='del-checkbox' type="checkbox" name="${position.id}" value="${position.id}">${position.id}
+          </h3>
+        </div>    
         <div class="card-body chess-board" id="${position.id}"></div>
       </div>
     </div>
