@@ -13,6 +13,7 @@ ${title}
 </%def>
 
 <%def name="body_content_after_board()">
+<div id='id_cb_div'>
   %for position in positions:
   <div class="col-sm-2">
     <div class="card">
@@ -25,6 +26,7 @@ ${title}
   </div>
   %endfor
   <div style="clear:both"></div>
+</div>
 </%def>
 
 <%def name="javascript()">
