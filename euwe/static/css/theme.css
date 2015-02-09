@@ -29,9 +29,20 @@
   overflow: hidden;
   color: white;
   background: #DD4814;
-  border: 1px;
+  border: 0px;
+  margin-bottom: 4px;
 }
 
-.del-checkbox {
-  margin: 20px;
+input[type="checkbox"].del-checkbox{
+  margin: 0px;
+  margin-left: 8px;
+}
+
+.board-id {
+  margin-left: 8px;
+  font-size: 1.5em;
+}
+
+.card {
+  border: 1px white solid;
 }

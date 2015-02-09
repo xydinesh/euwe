@@ -5,10 +5,6 @@ ${title}
 </%def>
 
 <%def name="body_content_before_board()">
-<h1>Welcome to ${project}, ${userid}</h1>
-<div id="message">
-${message}
-</div>
 <div id='flash-msg'>
   % for fmsg in request.session.pop_flash():
   <p>${fmsg}</p>
@@ -17,23 +13,18 @@ ${message}
 </%def>
 
 <%def name="body_content_after_board()">
-<form id='id_form_list' name='id_form_list' role='form'>
-<div class="row" id="id_cb_div">
   %for position in positions:
-    <div class="col-chess">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-heading simple">
-            <input class='del-checkbox' type="checkbox" name="${position.id}" value="${position.id}">${position.id}
-          </h3>
-        </div>    
+  <div class="col-sm-2">
+    <div class="card">
+        <div class="card-header card-heading">
+          <input class='del-checkbox' type="checkbox" name="${position.id}" value="${position.id}">
+          <span class='board-id'>${position.id}</span>
+        </div>
         <div class="card-body chess-board" id="${position.id}"></div>
-      </div>
     </div>
+  </div>
   %endfor
   <div style="clear:both"></div>
-</div>
-</form>
 </%def>
 
 <%def name="javascript()">

@@ -53,6 +53,7 @@
             <li><a id='tab-edit' href="/edit">Edit</a></li>
             % if userid:
             <li><a id='signout' href="/logout">Logout</a></li>
+            <li id='username'><a href=''>${userid}</a></li>
             % else:
             <li><a href="/login">Login<a></li>
             % endif
